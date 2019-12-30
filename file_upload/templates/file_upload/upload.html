@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8" />
+<title>ファイルアップロード</title>
+</head>
+<body>
+    <h1>ファイルをアップロード</h1>
+    <form method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.as_p }}
+      <button type="submit">アップロード</button>
+    </form>
+<hr />
+
+<script>
+console.log("ピーナ積木村");
+</script>
+
+<div id="app" >
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>RemainingTime</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="row in info.data">
+         <td>[[ row.Name ]]</td>
+         <td>[[ row.Total ]]</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#app',
+  data () {
+    return {
+      info: null
+    }
+  },
+
+  mounted () {
+    setInterval(this.greet, 1000);
+  },
+
+  methods: {
+    greet: function () {
+      axios
+        .get('/on_process')
+        .then(response => (this.info = response))
+
+    }
+
+  }
+
+})
+</script>
+
+<hr />
+
+{% for uploadfile in uploadfile_list %}
+    <a href="{{ uploadfile.file.url }}">{{ uploadfile }}</a>
+    <hr>
+{% endfor %}
+</body>
+</html>

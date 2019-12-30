@@ -1,0 +1,20 @@
+<html>
+<body>
+    <p>Data Uploaded</p>
+    <p>It works!</p>
+    <div>
+      <a href="success_category/media/data.json"　download="data.json"> data.json</a>
+      <hr>
+      <!-- {% for uploadfile in uploadfile_list %}
+        <a href="{% url 'app:download' uploadfile.pk %}">{{ uploadfile }}</a>
+        <hr>
+    　{% endfor %} -->
+    </div>
+    <div>
+    {% for uploadfile in uploadfile_list %}
+        <a href="{{ uploadfile.file.url }}">{{ uploadfile }}</a>
+        <hr>
+    {% endfor %}
+    </div>
+</body>
+</html>
