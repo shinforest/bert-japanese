@@ -1,4 +1,8 @@
 from django import forms
+import os
+from django.contrib import messages
+
+
 
 # DATA_CHOICES =(('category':'カテゴリー'),('numeric':'数値'))
 
@@ -32,3 +36,11 @@ class UploadFileForm(forms.Form):
         required=True,
 
     )
+    def clean_project(self):
+        list = os.listdir("./project_name")
+        project = self.cleaned_data['project']
+        if project in list:
+            del project
+            raise forms.ValidationError("・・・ERROR:すでに存在するプロジェクト名です:ERROR・・・・")
+        else:
+            return project

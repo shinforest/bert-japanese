@@ -4,6 +4,8 @@ from .forms import UploadFileForm
 from django.http import HttpResponse
 import os
 import sys
+import shutil
+import pandas as pd
 
 
 from django.db import models
@@ -15,10 +17,17 @@ from django.db import models
 
 # ------------------------------------------------------------------
 def file_upload(request):
+    shutil.rmtree("./on_process.csv")
+    cols = ['Task', 'Remaining Time']
+    df = pd.DataFrame(index=[], columns=cols)
+    df.to_csv("on_process.csv",header=True, index=False)
+    shutil.rmtree("./media")
+    os.makedirs('./media',exist_ok=True)
+
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            folder_path = request.POST['project']+'/input/input_data'
+            folder_path = "./project_name/"+request.POST['project']+'/input/input_data'
             os.makedirs(folder_path)
             sys.stderr.write("*** file_upload *** aaa ***\n")
             handle_uploaded_file(request.FILES['file'], request.POST['project'])
@@ -30,7 +39,7 @@ def file_upload(request):
             project_obj = request.POST['project']
             # handle_uploaded_datatype(request.POST.get('data_type'))
             if request.POST.get('data_type') == "category":
-                # os.system('bash data_sort.sh '+project_obj)
+                os.system('bash data_sort.sh '+project_obj)
                 return HttpResponseRedirect('/success_category')
 
             else:
@@ -59,7 +68,7 @@ def file_upload(request):
 def handle_uploaded_file(file_obj, project_name):
     sys.stderr.write("*** handle_uploaded_file *** aaa ***\n")
     sys.stderr.write(file_obj.name + "\n")
-    file_path = project_name+'/input/input_data/' + file_obj.name
+    file_path = "./project_name/"+project_name+'/input/input_data/' + file_obj.name
     sys.stderr.write(file_path + "\n")
     with open(file_path, 'wb+') as destination:
         for chunk in file_obj.chunks():
@@ -69,7 +78,7 @@ def handle_uploaded_file(file_obj, project_name):
 
 def handle_uploaded_post(column_obj, project_name):
     sys.stderr.write("*** handle_uploaded_file *** aaa ***\n")
-    file_path = project_name+'/input/column_names.txt'
+    file_path = "./project_name/"+project_name+'/input/column_names.txt'
     sys.stderr.write(file_path + "\n")
     with open(file_path, mode='w') as destination:
         sys.stderr.write("*** handle_uploaded_post *** ccc ***\n")
@@ -79,7 +88,7 @@ def handle_uploaded_post(column_obj, project_name):
 
 def handle_uploaded_project(project_obj):
     sys.stderr.write("*** handle_uploaded_file *** aaa ***\n")
-    file_path = project_obj+'/input/project_name.txt'
+    file_path = "./project_name/"+project_obj+'/input/project_name.txt'
     sys.stderr.write(file_path + "\n")
     with open(file_path, mode='w') as destination:
         sys.stderr.write("*** handle_uploaded_post *** ccc ***\n")
