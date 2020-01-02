@@ -13,16 +13,7 @@ from django.views import generic
 
 
 
-def success_category(request):
-    # path = "media/data.json"
-    # file_path = 'media/output.json'
-    #
-    #
-    # if os.path.exists(file_path):
-    #     with open(file_path, 'rb') as fh:
-    #         response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-    #         response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-    #         return response
+def success_category(request)
 
     path = "media"
     files_names = os.listdir(path)

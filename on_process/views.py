@@ -8,7 +8,7 @@ import csv
 
 def on_process(request):
     json_list = []
-    with open('on_going.csv', 'r') as f:
+    with open('on_process.csv', 'r') as f:
         for row in csv.DictReader(f):
             json_list.append(row)
 
